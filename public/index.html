@@ -2,23 +2,66 @@
 <html>
 <head>
   <title>Multiplayer Click Game</title>
+  <link rel="stylesheet" href="index.css">
 </head>
-<body>
-  <h1>🎮 Multiplayer Click Game</h1>
-  <button onclick="clickButton()">Click Me!</button>
-  <h2>Scores:</h2>
-  <pre id="output"></pre>
+ <body>
+   <div class="mainbox">
+   <div class="headDiv">
+     <h2>💬 Live Chat</h2>
+   </div>
+
+   <div class="chatbox" id="chatbox">
+     <p class="chatText_other">Hi there! 👋</p>
+     <p class="chatText_me">Hello! 😄</p>
+   </div>
+
+   <div class="inputdiv">
+     <input type="text" class="input" placeholder="message" id="msg">
+     <button class="btn" id="send">Send</button>
+   </div>
+ </div>
+
+  
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
     const socket = io();
 
-    function clickButton() {
-      socket.emit("click");
-    }
+    const btn = document.querySelector(".btn");
+    const input = document.querySelector(".input");
+    const chatbox = document.querySelector(".chatbox");
+    // send message
+    btn.addEventListener("click", sendmessage);
 
-    socket.on("players", (data) => {
-      document.getElementById("output").innerText = JSON.stringify(data, null, 2);
+    input.addEventListener("keydown", (e) =>{
+      if(e.key === "Enter"){
+        sendmessage();
+      }
+    });
+
+    function sendmessage(){
+      const text = input.value.trim();
+
+      if(!text) return;
+
+      socket.emit("chat message", text);
+      input.value = "";
+
+    }
+    // receive message
+
+    socket.on("chat message",(data) =>{
+      const p = document.createElement("p");
+
+      if(data.id === socket.id){
+        p.className = "chatText_me";
+      }else{
+        p.className = "chatText_other";
+      }
+      p.textContent = data.msg;
+      chatbox.appendChild(p);
+
+      chatbox.scrollTop = chatbox.scrollHeight;
     });
   </script>
 </body>
