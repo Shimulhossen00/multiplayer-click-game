@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Multiplayer Click Game</title>
+</head>
+<body>
+  <h1>🎮 Multiplayer Click Game</h1>
+  <button onclick="clickButton()">Click Me!</button>
+  <h2>Scores:</h2>
+  <pre id="output"></pre>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    function clickButton() {
+      socket.emit("click");
+    }
+
+    socket.on("players", (data) => {
+      document.getElementById("output").innerText = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>
