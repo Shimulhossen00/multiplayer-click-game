@@ -33,6 +33,7 @@
     const btn = document.querySelector(".btn");
     const input = document.querySelector(".input");
     const chatbox = document.querySelector(".chatbox");
+    const username = prompt("Enter your name:");
     // send message
     btn.addEventListener("click", sendmessage);
 
@@ -47,7 +48,11 @@
 
       if(!text) return;
 
-      socket.emit("chat message", text);
+      socket.emit("chat message", {
+        name: username,
+        msg: text
+        
+      });
       input.value = "";
 
     }
@@ -61,7 +66,7 @@
       }else{
         p.className = "chatText_other";
       }
-      p.textContent = data.msg;
+      p.innerHTML = `<strong>${data.name}</strong><br>${data.msg}`;
       chatbox.appendChild(p);
 
       chatbox.scrollTop = chatbox.scrollHeight;
