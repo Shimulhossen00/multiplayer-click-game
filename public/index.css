@@ -29,6 +29,12 @@ body{
     margin: 4px 0;
     font-size: 14px;
 }
+.chatbox p strong {
+  font-size: 12px;
+  opacity: 0.7;
+  display: block;
+  margin-bottom: 2px;
+}
 
 /* MY MESSAGE (RIGHT) */
 .chatText_me {
